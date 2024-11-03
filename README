@@ -13,6 +13,9 @@ Quick Install
 
   > make install
 
+- Workaround for error when running `make install`. Run `make CXXFLAGS="-fpermissive"`
+- By default the make command will generate the simp version of the minisat which offers different optimizations (eg. preprocessing and simplification of clause db according to the top level assignment). In order to generate the core version of the solver, run `make cr`.
+
 ================================================================================
 Configuration
 
