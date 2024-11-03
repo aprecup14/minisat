@@ -60,3 +60,36 @@ Examples:
 Run minisat with same heuristics as version 2.0:
 
 > minisat <cnf-file> -no-luby -rinc=1.5 -phase-saving=0 -rnd-freq=0.02
+
+================================================================================
+How to debug:
+
+- When debugging it is important to run the `make install` command with the `CXXFLAGS` parameter set to `"-g -O0"`. This disables build optimizations for debugging, so that all the methods are accesible in debug mode. A `make clean` might be required before performing the `make install CXXFLAGS="-fpermissive -g -O0"` to make sure changes are applied if the project was previously built.
+
+- For VS Code users. A `.vscode` directory needs to be created. Inside it, a `launch.json` file has to be created to configure the debugger. Example of such a file:
+```json{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Project",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "{PATH_TO_MINISAT_DIRECTORY}/build/release/bin/minisat_core", 
+            "args": ["{PATH_TO_INPUT_FILE}", {PATH_OUTPUT_FILE}], // Add any command-line arguments if needed
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb", // Use "lldb" for macOS or "cppvsdbg" for Windows
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build" // Optionally set to run `make` before debugging
+        }
+    ]
+}```
+
