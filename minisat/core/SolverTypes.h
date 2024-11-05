@@ -59,11 +59,19 @@ struct Lit {
     bool operator <  (Lit p) const { return x < p.x;  } // '<' makes p, ~p adjacent in the ordering.
 };
 
-
+// Encodes both the int variable and the sign associated to it. Eg. by encoding the var "-2" into a Lit type: we would get the Lit with x = 2 + 2 + 1 = 5
+// The least significant bit encodes the sign associated with the literal, while the rest of the bits represent the value it comes from.
 inline  Lit  mkLit     (Var var, bool sign) { Lit p; p.x = var + var + (int)sign; return p; }
+
+// Flips the least significant bit to obtain the inverse of the passed Lit. Eg. if p.x = 5 (101), ~p.x = 4 (100).
 inline  Lit  operator ~(Lit p)              { Lit q; q.x = p.x ^ 1; return q; }
+
 inline  Lit  operator ^(Lit p, bool b)      { Lit q; q.x = p.x ^ (unsigned int)b; return q; }
+
+// Returns the value of the least significant bit which represents the sign of the literal. Eg. p.x = 5 (101) => sign(p) = 101 & 001 = 1, so p represents a negated literal.
 inline  bool sign      (Lit p)              { return p.x & 1; }
+
+// Returns the value of the literal. Eg. p.x = 5 (101) => var(p) = 2. It is effectively a division by 2.
 inline  int  var       (Lit p)              { return p.x >> 1; }
 
 // Mapping Literals to and from compact integers suitable for array indexing:
