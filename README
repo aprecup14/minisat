@@ -64,7 +64,7 @@ Run minisat with same heuristics as version 2.0:
 ================================================================================
 How to debug:
 
-- When debugging it is important to run the `make install` command with the `CXXFLAGS` parameter set to `"-g -O0"`. This disables build optimizations for debugging, so that all the methods are accesible in debug mode. A `make clean` might be required before performing the `make install CXXFLAGS="-fpermissive -g -O0"` to make sure changes are applied if the project was previously built.
+- When debugging it is important to run the `make install` command with the `CXXFLAGS` parameter set to `"-g -O0"`. This disables build optimizations for debugging, so that all the methods are accesible in debug mode. A `make clean` might be required before performing the `make install cr CXXFLAGS="-g -O0 -fpermissive"` to make sure changes are applied if the project was previously built.
 
 - For VS Code users. A `.vscode` directory needs to be created. Inside it, a `launch.json` file has to be created to configure the debugger. Example of such a file:
 ```json{
