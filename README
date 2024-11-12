@@ -53,6 +53,9 @@ minisat/simp/           An extended solver with simplification capabilities
 doc/                    Documentation
 README
 LICENSE
+latex                   The latex project
+diagrams                UML Diagrams representing different Minisat flows
+benchmarks              Contains benchmark results
 
 ================================================================================
 Examples:
