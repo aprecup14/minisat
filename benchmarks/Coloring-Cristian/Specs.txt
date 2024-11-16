@@ -1,0 +1,21 @@
+Hardware specifications:
+CPU: 11th Gen Intel® Core™ i3-1115G4 @ 3.00 GHz (dual-core, hyper-threading enabled).
+RAM: 8 GB (7.80 GB usable).
+System type: 64-bit operating system, x64-based processor.
+Storage: Samsung 970 EVO Plus SSD, 1TB, NVMe, M.2.
+Graphics: Integrated Intel® UHD Graphics.
+System architecture: 64-bit.
+
+Software specifications:
+Operating system: Windows 11 Home (version 24H2) with Ubuntu 24.04.1 LTS running on WSL.
+MiniSAT version: Installed from the official repository link provided.
+Test environment:
+
+Command-line options:
+MiniSAT was executed using the following command:
+minisat filename.cnf filename.txt
+Runtime conditions: Tests were executed sequentially, with an average runtime of 10–14 hours per problem.
+Resources used: Average CPU usage was approximately 200%, with memory usage stable at 300 MB during the tests.
+
+Additional notes:
+No additional notes.
