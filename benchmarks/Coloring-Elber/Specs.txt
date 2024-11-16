@@ -1,0 +1,18 @@
+
+Hardware specifications:
+CPU: AMD Ryzen 7 3700U at 2.30 GHz (quad-core, with integrated Radeon Vega graphics).
+RAM: 16 GB (13.9 GB usable).
+System type: 64-bit operating system, x64-based processor.
+Storage: INTEL SSDPEKNW 512 GB (SSD, NVMe).
+Graphics: Integrated AMD Radeon Vega mobile graphics.
+System architecture: 64-bit.
+
+Software specifications:
+Operating system: Windows 10 Pro (version 22H2) with Ubuntu 24.04.1 LTS.
+MiniSAT version: Installed from the official repository link provided.
+
+Command-line options:
+MiniSAT was executed using the following command:
+./MiniSat_v1.14_linux ./filename.cnf filename.txt > filename.txt
+Runtime conditions: Tests were executed sequentially, with an average runtime of 10–14 hours per problem.
+Resources used: Average CPU usage was approximately 200%, with memory usage stable at 300 MB during the tests.
