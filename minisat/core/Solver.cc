@@ -240,6 +240,8 @@ void Solver::cancelUntil(int level) {
         qhead = trail_lim[level];
         trail.shrink(trail.size() - trail_lim[level]);
         trail_lim.shrink(trail_lim.size() - level);
+
+        printf("A avut loc ceva conflict, revert la decision level %d\n", level);
     } }
 
 
@@ -487,17 +489,35 @@ inline void prettyPrint (Lit p) { printf("%s%d ", sign(p) ? "!" : "", var(p) + 1
 
 void Solver::uncheckedEnqueue(Lit p, CRef from)
 {
-    // printf("NO assignment should exist for Lit ");
-    // prettyPrint(p);
     assert(value(p) == l_Undef);
     assigns[var(p)] = lbool(!sign(p));
     vardata[var(p)] = mkVarData(from, decisionLevel());
     trail.push_(p);
-    printf("\nLiteral asignat!. Asignarile curente sunt in numar de %d:\n", trail.size());
-    for (int i = 0; i < trail.size(); i++){
-        prettyPrint(trail[i]);
-        printf(" asignat ");
-        printf("%d ", value(trail[i]));
+    
+    int decisionLevelStart = -1;
+    printf("Literal asignat! Avem %d asignari\n", trail.size());
+    // printf("Nivelul curent de decizie este %d\n", trail_lim.size());
+    printf("Nivel decizie|Asignari\n");
+    printf("(0)          | ");
+    if (trail_lim.size() == 0){
+        for (int j = 0; j < trail.size(); j++){
+                    printf("%s%d ",value(var(trail[j])) == l_True ? "" : "!", var(trail[j]) + 1);
+        }
+    }
+    printf("\n");
+
+    for (int i = 0 ; i < trail_lim.size(); i++){
+        int currentDecisionLevel = i + 1;
+        int currentDecisionLevelTrailStartIdx = trail_lim[i];
+        bool hasNextItem = i + 1 < trail_lim.size();
+        int nextDecisionLevelIndex = hasNextItem ? trail_lim[i + 1] : trail.size();
+        printf("(%d)          | ", currentDecisionLevel);
+    
+        for (int j = currentDecisionLevelTrailStartIdx; j < nextDecisionLevelIndex; j++ ){
+            printf("%s%d ",value(var(trail[j])) == l_True ? "" : "!", var(trail[j]) + 1);
+        }
+        
+        printf("\n");
     }
     printf("\n");
 }
