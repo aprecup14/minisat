@@ -125,6 +125,7 @@ Var Solver::newVar(lbool upol, bool dvar)
     }else
         v = next_var++;
 
+    printf("Intialized new variable %d\n", v);
     watches  .init(mkLit(v, false));
     watches  .init(mkLit(v, true ));
     assigns  .insert(v, l_Undef);
@@ -482,15 +483,24 @@ void Solver::analyzeFinal(Lit p, LSet& out_conflict)
     seen[var(p)] = 0;
 }
 
+inline void prettyPrint (Lit p) { printf("%s%d ", sign(p) ? "!" : "", var(p) + 1);}
 
 void Solver::uncheckedEnqueue(Lit p, CRef from)
 {
+    // printf("NO assignment should exist for Lit ");
+    // prettyPrint(p);
     assert(value(p) == l_Undef);
     assigns[var(p)] = lbool(!sign(p));
     vardata[var(p)] = mkVarData(from, decisionLevel());
     trail.push_(p);
+    printf("\nLiteral asignat!. Asignarile curente sunt in numar de %d:\n", trail.size());
+    for (int i = 0; i < trail.size(); i++){
+        prettyPrint(trail[i]);
+        printf(" asignat ");
+        printf("%d ", value(trail[i]));
+    }
+    printf("\n");
 }
-
 
 /*_________________________________________________________________________________________________
 |
