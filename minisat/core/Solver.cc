@@ -241,7 +241,7 @@ void Solver::cancelUntil(int level) {
         trail.shrink(trail.size() - trail_lim[level]);
         trail_lim.shrink(trail_lim.size() - level);
 
-        printf("A avut loc ceva conflict, revert la decision level %d\n", level);
+        printf("Revert la decision level %d\n", level);
     } }
 
 
@@ -313,6 +313,11 @@ void Solver::analyze(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)
         if (c.learnt())
             claBumpActivity(c);
 
+        printf("Conflict datorita ");
+        for (int j = 0; j < c.size(); j++){
+            printf("%s%d ",sign(c[j]) ? "!" : "", var(c[j]) + 1);
+        }
+
         for (int j = (p == lit_Undef) ? 0 : 1; j < c.size(); j++){
             Lit q = c[j];
 
@@ -334,6 +339,7 @@ void Solver::analyze(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)
         pathC--;
 
     }while (pathC > 0);
+    printf("\n");
     out_learnt[0] = ~p;
 
     // Simplify conflict clause:
@@ -543,6 +549,8 @@ CRef Solver::propagate()
         vec<Watcher>&  ws  = watches.lookup(p);
         Watcher        *i, *j, *end;
         num_props++;
+        printf("Propagare pentru variabila de decizie: ");
+        printf("%s%d\n", value(var(p)) == l_True ? "" : "!", var(p) + 1);
 
         for (i = j = (Watcher*)ws, end = i + ws.size();  i != end;){
             // Try to avoid inspecting the clause:
@@ -581,7 +589,11 @@ CRef Solver::propagate()
                 while (i < end)
                     *j++ = *i++;
             }else
-                uncheckedEnqueue(first, cr);
+                {
+                    printf("S-a dedus un alt literar din decizie. ");
+                    uncheckedEnqueue(first, cr);
+                }
+                
 
         NextClause:;
         }
@@ -815,6 +827,7 @@ lbool Solver::search(int nof_conflicts)
                     return l_True;
             }
 
+            printf("Se trece la un nou nivel de decizie...\n");
             // Increase decision level and enqueue 'next'
             newDecisionLevel();
             uncheckedEnqueue(next);
