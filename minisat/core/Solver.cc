@@ -753,13 +753,33 @@ lbool Solver::search(int nof_conflicts)
         CRef confl = propagate();
         if (confl != CRef_Undef){
             // CONFLICT
+            printf("Conflict!\n");
             conflicts++; conflictC++;
-            if (decisionLevel() == 0) return l_False;
+            if (decisionLevel() == 0)  {
+                printf("Conflict la nivel de decizie 0. STOP. Clauzele invatate:\n");
+                for (int i = 0; i < learnt_clause.size();i++){
+                    printf("%s%d ",sign(learnt_clause[i]) ? "!" : "", var(learnt_clause[i]) + 1);
+                }
+                printf("\n");
+
+                Clause& c = ca[confl];
+                printf("Conflict datorita ");
+                for (int j = 0; j < c.size(); j++){
+                    printf("%s%d ",sign(c[j]) ? "!" : "", var(c[j]) + 1);
+                }
+                printf("\n");
+                return l_False;
+            }
 
             learnt_clause.clear();
             analyze(confl, learnt_clause, backtrack_level);
             cancelUntil(backtrack_level);
 
+            printf("Clauzele invatate dupa analiza:\n");
+            for (int i = 0; i < learnt_clause.size();i++){
+                printf("%s%d ",sign(learnt_clause[i]) ? "!" : "", var(learnt_clause[i]) + 1);
+            }
+            printf("\n");
             if (learnt_clause.size() == 1){
                 uncheckedEnqueue(learnt_clause[0]);
             }else{
@@ -794,9 +814,15 @@ lbool Solver::search(int nof_conflicts)
                 return l_Undef; }
 
             // Simplify the set of problem clauses:
-            if (decisionLevel() == 0 && !simplify())
+            if (decisionLevel() == 0 && !simplify()){
+                printf("Nu mai exista alte variante. Clauzele invatate:\n");
+                for (int i = 0; i < learnt_clause.size();i++){
+                    printf("%s%d ",sign(learnt_clause[i]) ? "!" : "", var(learnt_clause[i]) + 1);
+                }
+                printf("\n");
                 return l_False;
-
+            }
+                
             if (learnts.size()-nAssigns() >= max_learnts)
                 // Reduce the set of learnt clauses:
                 reduceDB();
@@ -809,6 +835,7 @@ lbool Solver::search(int nof_conflicts)
                     // Dummy decision level:
                     newDecisionLevel();
                 }else if (value(p) == l_False){
+                    // printf("aici?");
                     analyzeFinal(~p, conflict);
                     return l_False;
                 }else{
