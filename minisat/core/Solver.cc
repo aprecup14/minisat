@@ -125,7 +125,7 @@ Var Solver::newVar(lbool upol, bool dvar)
     }else
         v = next_var++;
 
-    printf("Intialized new variable %d\n", v);
+    printf("Proiect_VF -- Noua variabila initializata %d\n", v);
     watches  .init(mkLit(v, false));
     watches  .init(mkLit(v, true ));
     assigns  .insert(v, l_Undef);
@@ -241,7 +241,7 @@ void Solver::cancelUntil(int level) {
         trail.shrink(trail.size() - trail_lim[level]);
         trail_lim.shrink(trail_lim.size() - level);
 
-        printf("Revert la decision level %d\n", level);
+        printf("Proiect VF -- Revert la decision level %d\n", level);
     } }
 
 
@@ -501,10 +501,10 @@ void Solver::uncheckedEnqueue(Lit p, CRef from)
     trail.push_(p);
     
     int decisionLevelStart = -1;
-    printf("Literal asignat! Avem %d asignari\n", trail.size());
+    printf("Proiect VF -- Literal asignat! Avem %d asignari\n", trail.size());
     // printf("Nivelul curent de decizie este %d\n", trail_lim.size());
-    printf("Nivel decizie|Asignari\n");
-    printf("(0)          | ");
+    printf("Proiect VF -- Nivel decizie|Asignari\n");
+    printf("Proiect VF -- (0)          | ");
     if (trail_lim.size() == 0){
         for (int j = 0; j < trail.size(); j++){
                     printf("%s%d ",value(var(trail[j])) == l_True ? "" : "!", var(trail[j]) + 1);
@@ -517,7 +517,7 @@ void Solver::uncheckedEnqueue(Lit p, CRef from)
         int currentDecisionLevelTrailStartIdx = trail_lim[i];
         bool hasNextItem = i + 1 < trail_lim.size();
         int nextDecisionLevelIndex = hasNextItem ? trail_lim[i + 1] : trail.size();
-        printf("(%d)          | ", currentDecisionLevel);
+        printf("Proiect VF -- (%d)          | ", currentDecisionLevel);
     
         for (int j = currentDecisionLevelTrailStartIdx; j < nextDecisionLevelIndex; j++ ){
             printf("%s%d ",value(var(trail[j])) == l_True ? "" : "!", var(trail[j]) + 1);
@@ -549,7 +549,7 @@ CRef Solver::propagate()
         vec<Watcher>&  ws  = watches.lookup(p);
         Watcher        *i, *j, *end;
         num_props++;
-        printf("Propagare pentru variabila de decizie: ");
+        printf("Proiect VF -- Propagare pentru variabila de decizie: ");
         printf("%s%d\n", value(var(p)) == l_True ? "" : "!", var(p) + 1);
 
         for (i = j = (Watcher*)ws, end = i + ws.size();  i != end;){
@@ -590,7 +590,7 @@ CRef Solver::propagate()
                     *j++ = *i++;
             }else
                 {
-                    printf("S-a dedus un alt literar din decizie. ");
+                    printf("Proiect VF -- S-a dedus un alt literar din decizie. ");
                     uncheckedEnqueue(first, cr);
                 }
                 
@@ -753,17 +753,17 @@ lbool Solver::search(int nof_conflicts)
         CRef confl = propagate();
         if (confl != CRef_Undef){
             // CONFLICT
-            printf("Conflict!\n");
+            printf("Proiect VF -- Conflict!\n");
             conflicts++; conflictC++;
             if (decisionLevel() == 0)  {
-                printf("Conflict la nivel de decizie 0. STOP. Clauzele invatate:\n");
+                printf("Proiect VF -- Conflict la nivel de decizie 0. STOP. Clauzele invatate:\n");
                 for (int i = 0; i < learnt_clause.size();i++){
                     printf("%s%d ",sign(learnt_clause[i]) ? "!" : "", var(learnt_clause[i]) + 1);
                 }
                 printf("\n");
 
                 Clause& c = ca[confl];
-                printf("Conflict datorita ");
+                printf("Proiect VF -- Conflict datorita ");
                 for (int j = 0; j < c.size(); j++){
                     printf("%s%d ",sign(c[j]) ? "!" : "", var(c[j]) + 1);
                 }
@@ -775,7 +775,7 @@ lbool Solver::search(int nof_conflicts)
             analyze(confl, learnt_clause, backtrack_level);
             cancelUntil(backtrack_level);
 
-            printf("Clauzele invatate dupa analiza:\n");
+            printf("Proiect VF -- Clauzele invatate dupa analiza:\n");
             for (int i = 0; i < learnt_clause.size();i++){
                 printf("%s%d ",sign(learnt_clause[i]) ? "!" : "", var(learnt_clause[i]) + 1);
             }
@@ -815,7 +815,7 @@ lbool Solver::search(int nof_conflicts)
 
             // Simplify the set of problem clauses:
             if (decisionLevel() == 0 && !simplify()){
-                printf("Nu mai exista alte variante. Clauzele invatate:\n");
+                printf("Proiect VF -- Nu mai exista alte variante. Clauzele invatate:\n");
                 for (int i = 0; i < learnt_clause.size();i++){
                     printf("%s%d ",sign(learnt_clause[i]) ? "!" : "", var(learnt_clause[i]) + 1);
                 }
@@ -854,7 +854,7 @@ lbool Solver::search(int nof_conflicts)
                     return l_True;
             }
 
-            printf("Se trece la un nou nivel de decizie...\n");
+            printf("Proiect VF -- Se trece la un nou nivel de decizie...\n");
             // Increase decision level and enqueue 'next'
             newDecisionLevel();
             uncheckedEnqueue(next);
